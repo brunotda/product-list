@@ -37,27 +37,31 @@ const Price: React.FC<PriceProps> = ({
         handles.productPriceContainer
       } ${parseTextAlign(textAlign)}`}
     >
-      {item.listPrice && item.listPrice !== item.sellingPrice && showListPrice && (
-        <div
-          id={`list-price-${item.id}`}
-          className={`${handles.productPriceCurrency}  ${applyModifiers(
-            handles.productPriceCurrency,
-            item.sellingPrice === 0 ? 'gift' : ''
-          )} c-muted-1 strike t-mini mb2`}
-        >
-          <FormattedCurrency
-            value={
-              (item.listPrice * (item.unitMultiplier ?? 1) * item.quantity) /
-              100
-            }
-          />
-        </div>
-      )}
+      {item.sellingPrice != null &&
+        item.sellingPrice > 0.01 &&
+        item.listPrice &&
+        item.listPrice !== item.sellingPrice &&
+        showListPrice && (
+          <div
+            id={`list-price-${item.id}`}
+            className={`${handles.productPriceCurrency}  ${applyModifiers(
+              handles.productPriceCurrency,
+              item.sellingPrice != null && item.sellingPrice === 0 ? 'gift' : ''
+            )} c-muted-1 strike t-mini mb2`}
+          >
+            <FormattedCurrency
+              value={
+                (item.listPrice * (item.unitMultiplier ?? 1) * item.quantity) /
+                100
+              }
+            />
+          </div>
+        )}
       <div
         id={`price-${item.id}`}
         className={`${handles.productPrice} ${applyModifiers(
           handles.productPrice,
-          item.sellingPrice === 0 ? 'gift' : ''
+          item.sellingPrice != null && item.sellingPrice <= 0.01 ? 'gift' : ''
         )} div fw6 fw5-m`}
       >
         <FormattedPrice
